@@ -1,8 +1,9 @@
-// require("dotenv").config();
+require("dotenv").config();
 const mongoose = require("mongoose");
-const Path="mongodb://localhost:27017/attendify"
 
-mongoose.connect('mongodb://127.0.0.1:27017/attendify')  //return s promise
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/attendify';
+
+mongoose.connect(MONGODB_URI)
 .then(()=>{
     console.log("MongoDb connected");
 })
@@ -30,7 +31,7 @@ const session = require("express-session");
 const User = require("./Model/User");
 
 app.use(session({
-  secret: "heu5671iio90",  
+  secret: process.env.SESSION_SECRET || "heu5671iio90",  
   resave: false,
   saveUninitialized: false
 }));
@@ -53,9 +54,9 @@ app.use((req, res, next) => {
   next();
 });
 // import router
-const landingRoute=require('./routes/api/landing');
-const authRoute=require('./routes/api/auth');
-const infoRoute=require('./routes/api/info');
+const landingRoute=require('./Routes/api/landing');
+const authRoute=require('./Routes/api/auth');
+const infoRoute=require('./Routes/api/info');
 const seedDB = require("./seedStudnet");
 const seedSections = require("./seedSec");
 const seedSimpleUsers = require("./seedStudnet");
@@ -78,6 +79,8 @@ app.get('/',(req,res)=>{
     res.redirect('/landing');
 })
 
-app.listen(8080,()=>{
-    console.log("server started at port 8080")
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT,()=>{
+    console.log(`server started at port ${PORT}`)
 })

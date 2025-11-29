@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: attendify
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+    healthCheckPath: /
+
+databases:
+  - name: attendify-mongodb
+    plan: free
+    databaseName: attendify
+    user: attendify-user
+
